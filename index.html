@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>曙光一号火星基地 · 3D 科学交互版</title>
+<title>曙光一号火星基地 · 搞笑爆破版</title>
 <style>
 :root{--bg:#191919;--sf:rgba(25,25,25,.78);--bd:rgba(255,255,255,.18);--tx:#fff;--t2:rgba(255,255,255,.68);--ac:#DE9255}
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#2a140c;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
@@ -88,12 +88,38 @@ header p{max-width:510px;background:rgba(25,25,25,.8);padding:2px 6px;border-rad
 }
 @media(max-height:550px) and (min-width:721px){#info{top:90px;bottom:76px;max-height:none}#info .top{padding-top:12px;padding-bottom:8px}#iStatus{padding-bottom:8px}#iBody{padding:12px 20px}}
 
+
+/* Weather and explicitly fictional planet-scale visualisation. */
+#topTools{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:15}
+#topTools button{position:static!important;left:auto!important;right:auto!important;top:auto!important;min-height:44px;padding:0 14px;border:1px solid var(--bd);border-radius:8px;background:rgba(28,25,23,.9);color:#fff;font:inherit;font-size:14px;cursor:pointer;white-space:nowrap}
+#topTools button:hover{background:#453126}#topTools #detonateBtn{color:#ffc7be;border-color:#b86f65;background:#3e2421}#topTools #weatherBtn[aria-expanded=true]{border-color:#e7b28b;background:#4b3423}
+#weatherPanel{position:fixed;top:76px;right:16px;bottom:auto;max-height:calc(100dvh - 160px);width:380px;padding:0;z-index:16;background:rgba(29,26,24,.98);display:flex;flex-direction:column;overflow:hidden}#weatherPanel[hidden]{display:none}
+.w-heading{padding:18px 56px 14px 20px;position:relative;flex:none;border-bottom:1px solid var(--kb)}.w-heading h2{margin:0;font-size:22px;line-height:1.4}.w-heading p{margin:4px 0 0;color:var(--km);font-size:14px;line-height:1.6}.w-close{position:absolute;top:10px;right:8px;width:44px;height:44px;background:none;border:0;color:#fff;font-size:24px;cursor:pointer;border-radius:8px}.w-close:hover{background:#fff1}
+.w-scroll{padding:16px 20px 20px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;min-height:0}
+.w-presets{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}.w-presets button{min-height:44px;padding:10px 8px;border:1px solid var(--kb);border-radius:8px;background:#ffffff05;color:var(--kt);font:inherit;font-size:14px;cursor:pointer;line-height:1.5}.w-presets button:last-child{grid-column:1/-1}.w-presets button[aria-pressed=true]{border-color:#efb481;background:#efb4811c;color:#ffd1ac}
+.w-scenario{font-size:18px;margin:4px 0 12px;color:#fff}.w-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.w-metric{padding:12px;border:1px solid var(--kb);border-radius:8px}.w-metric dt{font-size:14px;color:var(--km);margin:0 0 4px}.w-metric dd{font-size:22px;line-height:1.4;margin:0;font-variant-numeric:tabular-nums;color:#fff}.w-metric dd small{font-size:14px;color:var(--km);margin-left:3px}.w-derived{margin-top:12px;padding:12px 14px;border:1px solid var(--kb);border-radius:8px}.w-derived p{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin:6px 0;color:var(--km);line-height:1.6}.w-derived b{color:#f2c9a8;font-variant-numeric:tabular-nums;font-weight:550;text-align:right}.w-copy{font-size:15px;line-height:1.8;color:var(--kt);margin:14px 0}.w-caption{font-size:14px;line-height:1.7;color:var(--km);margin:12px 0}.w-details{border-top:1px solid var(--kb);padding-top:4px;margin-top:16px}.w-details summary{min-height:44px;display:list-item;cursor:pointer;font-size:15px;color:#f0b584;padding:12px 0}.w-details p,.w-details li{font-size:14px;line-height:1.8;color:var(--km)}.w-details ul{padding-left:20px}.w-details code{font-size:14px;white-space:normal;overflow-wrap:anywhere;color:#f5cca9}.w-details .w-equation{padding:12px;background:#ffffff05;border-radius:8px;margin:12px 0}.w-details a{color:#a9cdf8;text-decoration:none;overflow-wrap:anywhere}.w-details a:hover{text-decoration:underline}.w-ref{display:block;min-height:44px;padding:10px 0;font-size:14px;line-height:1.6;border-bottom:1px solid var(--kb)}
+.w-done{width:100%;min-height:44px;border:1px solid #c18b57;border-radius:8px;background:#c18b5725;color:#ffd0a9;font:inherit;font-size:14px;cursor:pointer;margin-top:12px}
+#weatherBadge{position:fixed;left:24px;top:auto;bottom:84px;z-index:6;max-width:calc(100vw - 48px);min-height:44px;background:#201a17e8;border:1px solid var(--bd);border-radius:8px;padding:8px 12px;font:inherit;font-size:14px;line-height:1.5;color:#e9d4c2;cursor:pointer}#weatherBadge::before{content:'◌';margin-right:8px;color:#f0b584}body.has-info #weatherBadge,body.weather-open #weatherBadge{display:none}
+@media(min-width:721px) and (max-width:1050px){header{max-width:330px}header h1{font-size:24px}header p{max-width:310px;font-size:14px}#topTools{gap:6px}#topTools button{padding:0 10px}}
+@media(max-width:720px){#topTools{top:84px;left:16px;right:16px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}#topTools button{padding:0 4px;font-size:14px;min-width:0}
+ #weatherPanel{left:12px;right:12px;top:140px;bottom:76px;width:auto;max-height:none}.w-heading{padding:16px 54px 12px 16px}.w-heading h2{font-size:20px}.w-scroll{padding:14px 16px 18px}.w-grid{gap:8px}.w-metric{padding:10px 12px}.w-metric dd{font-size:21px}.w-presets{gap:6px;margin-bottom:14px}.w-presets button{padding:8px 4px}.w-copy{font-size:15px}.w-details p,.w-details li{font-size:14px}
+ #weatherBadge{top:auto;bottom:124px;left:16px;max-width:calc(100vw - 32px);font-size:14px;padding:8px 10px}#side{top:140px}#sceneNote{max-width:calc(100vw - 32px)}
+}
+@media(max-height:620px) and (min-width:721px){#weatherPanel{top:76px;bottom:76px;max-height:none}}
+
+
+/* The gag is a lightweight layer on the original base, never a planet view. */
+#boomWord{position:fixed;left:50%;top:25%;transform:translateX(-50%) rotate(-7deg);z-index:17;font-size:clamp(40px,7vw,88px);font-weight:850;letter-spacing:.08em;line-height:1.2;color:#ffd59b;text-shadow:3px 3px 0 #4c2619,-2px -2px 0 #4c2619;pointer-events:none}#boomWord[hidden]{display:none}
+#boomHUD{display:none;position:fixed;left:24px;bottom:96px;width:380px;max-width:calc(100vw - 48px);padding:18px 20px;border:1px solid #be8b61;border-radius:12px;background:#211b17f2;z-index:12;backdrop-filter:blur(10px)}body.boom-active #boomHUD{display:block}body.boom-active #labels,body.boom-active #weatherBadge,body.boom-active #sceneNote{display:none}body.weather-open #boomHUD{display:none}.boom-kicker{font-size:14px;color:#efb481;letter-spacing:.05em;margin:0 0 8px}#boomHUD h2{font-size:23px;line-height:1.45;margin:0 0 8px;color:#fff}#boomCaption{font-size:14px;line-height:1.7;color:#d1c1b5;margin:0 0 16px}.boom-actions{display:flex;gap:8px}.boom-actions button{min-height:44px;flex:1;border:1px solid #857364;border-radius:8px;background:#ffffff05;color:#fff;padding:8px 12px;font:inherit;font-size:14px;cursor:pointer}.boom-actions #rebuildBase{color:#2b190d;background:#f0b584;border-color:#f0b584}
+@media(max-width:720px){#boomHUD{left:16px;right:16px;width:auto;max-width:none;bottom:84px;padding:14px 16px}#boomHUD h2{font-size:21px}#boomCaption{margin-bottom:12px}#boomWord{top:27%;font-size:52px}}
+@media(prefers-reduced-motion:reduce){#boomWord{display:none!important}}
+
 </style></head><body>
 <canvas id="c" aria-label="曙光一号火星基地三维模型，可拖拽旋转、滚轮缩放、点击设施查看说明"></canvas>
 <div id="labels"></div>
 <header><h1>曙光一号火星基地</h1><p>地表设施 · 地下居住舱 · 点击探索科学依据</p></header>
-<button id="guideBtn" type="button">基地手册</button>
-<button id="listBtn" type="button" aria-expanded="false" aria-controls="side">设施列表</button>
+<div id="topTools"><button id="guideBtn" type="button">基地手册</button>
+<button id="listBtn" type="button" aria-expanded="false" aria-controls="side">设施列表</button><button id="weatherBtn" type="button" aria-expanded="false" aria-controls="weatherPanel">天气模拟</button><button id="detonateBtn" type="button" aria-label="直接播放炸飞基地的搞笑动画">炸掉基地</button></div>
 <nav id="side" class="panel" aria-label="设施列表"><div id="zoneList"></div></nav>
 <section id="info" class="panel" hidden aria-label="设施知识卡片">
  <button id="iClose" type="button" aria-label="关闭说明">×</button>
@@ -115,6 +141,25 @@ header p{max-width:510px;background:rgba(25,25,25,.8);padding:2px 6px;border-rad
  <button id="lbl" type="button" aria-pressed="true">标签</button>
 </div>
 
+
+<section id="weatherPanel" class="panel" hidden aria-labelledby="weatherTitle">
+ <div class="w-heading"><h2 id="weatherTitle">火星天气模拟</h2><p>科学范围约束的教学预设 · 非实时观测</p><button id="weatherClose" class="w-close" type="button" aria-label="关闭天气模拟">×</button></div>
+ <div class="w-scroll">
+  <div id="weatherPresets" class="w-presets" role="group" aria-label="选择天气"></div>
+  <h3 id="weatherName" class="w-scenario"></h3>
+  <dl class="w-grid"><div class="w-metric"><dt>近地气温</dt><dd><span id="wTemp"></span><small>°C</small></dd></div><div class="w-metric"><dt>近地气压</dt><dd><span id="wPressure"></span><small>Pa</small></dd></div><div class="w-metric"><dt>近地风速</dt><dd><span id="wWind"></span><small>m/s</small></dd></div><div class="w-metric"><dt>尘埃光学厚度</dt><dd>τ <span id="wTau"></span></dd></div></dl>
+  <div class="w-derived"><p><span>估算气体密度</span><b id="wRho"></b></p><p><span>估算风动压</span><b id="wQ"></b></p><p><span>直达太阳光束透过率</span><b id="wBeam"></b></p></div>
+  <p id="weatherNote" class="w-copy" aria-live="polite"></p>
+  <p class="w-caption">以上四个输入是独立选定的情景值，并非同一地点、同一时刻的联合实测。视觉雾化、扬尘速度和天空色彩是艺术映射，不是气象预报或能见度反演。地下密封舱保持清晰，作为剖面讲解层，不表示室内也在扬尘。</p>
+  <button id="weatherDone" class="w-done" type="button">收起面板，观察 3D 场景</button>
+  <details class="w-details" id="weatherScience"><summary>科学依据与简化假设</summary>
+   <div id="weatherMethods"></div><div id="weatherRefs"></div>
+  </details>
+ </div>
+</section>
+<button id="weatherBadge" type="button" aria-label="查看当前天气"></button>
+<div id="boomWord" hidden aria-hidden="true">轰！</div>
+<section id="boomHUD" aria-label="搞笑爆炸控制"><p class="boom-kicker">JUST FOR FUN / 纯搞笑</p><h2 id="boomTitle">基地：我先飞一会儿</h2><p id="boomCaption" aria-live="polite">纯搞笑模型动画</p><div class="boom-actions"><button id="blastAgain" type="button">再炸一次</button><button id="rebuildBase" type="button">一键重建</button></div></section>
 <dialog id="guide" aria-labelledby="guideTitle">
  <div class="g-head"><div><h2 id="guideTitle">火星基地 · 科学与工程手册</h2><p>17 个部分 / 12 组来源 / 概念设计，不是施工方案</p></div><button id="guideClose" type="button" aria-label="关闭基地手册">×</button></div>
  <div class="g-layout"><nav class="g-index" id="guideIndex" aria-label="手册章节"></nav><div class="g-mobile-select"><label for="guideSelect" class="k-empty">选择章节</label><select id="guideSelect"></select></div><article class="g-content" id="guideContent" tabindex="0"></article></div>
@@ -579,7 +624,7 @@ function applyCam() {
 }
 function flyTo(v) { goal.t.set(...v.t); goal.d = v.d; goal.pol = v.pol; let a = v.az; while (a - ctl.az > Math.PI) a -= Math.PI * 2; while (a - ctl.az < -Math.PI) a += Math.PI * 2; goal.az = a; if (reduce) { ctl.t.copy(goal.t); ctl.d = goal.d; ctl.az = goal.az; ctl.pol = goal.pol; } }
 const pointers = new Map(); let pinch0 = 0, downPos = null, moved = false;
-canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, b: e.button, shift: e.shiftKey }); downPos = { x: e.clientX, y: e.clientY }; moved = false; lastInteract = performance.now(); if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); } });
+canvas.addEventListener('pointerdown', e => {  canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, b: e.button, shift: e.shiftKey }); downPos = { x: e.clientX, y: e.clientY }; moved = false; lastInteract = performance.now(); if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); } });
 canvas.addEventListener('pointermove', e => {
   const p = pointers.get(e.pointerId); if (!p) return;
   const dx = e.clientX - p.x, dy = e.clientY - p.y; p.x = e.clientX; p.y = e.clientY;
@@ -595,12 +640,12 @@ const endP = e => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch0 
 canvas.addEventListener('pointerup', e => { const wasMoved = moved; endP(e); if (!wasMoved && e.button === 0) pick(e); });
 canvas.addEventListener('pointercancel', endP);
 canvas.addEventListener('contextmenu', e => e.preventDefault());
-canvas.addEventListener('wheel', e => { e.preventDefault(); goal.d = T.MathUtils.clamp(goal.d * Math.exp(e.deltaY * 0.001), 14, 220); lastInteract = performance.now(); }, { passive: false });
+canvas.addEventListener('wheel', e => { e.preventDefault();  goal.d = T.MathUtils.clamp(goal.d * Math.exp(e.deltaY * 0.001), 14, 220); lastInteract = performance.now(); }, { passive: false });
 
 // ---------- picking ----------
 const ray = new T.Raycaster(), mv = new T.Vector2();
 const pickables = Object.values(zoneGroups);
-function pick(e) {
+function pick(e) { if(blastActive)return; 
   const r = canvas.getBoundingClientRect(); mv.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
   ray.setFromCamera(mv, camera);
   const hits = ray.intersectObjects(scene.children, true);
@@ -665,7 +710,7 @@ function chapterButton(id,name,n){const b=document.createElement('button');b.typ
 chapterButton('overview','总览与阅读说明');
 groups.forEach(g=>{const h=document.createElement('div');h.className='g-cat';h.textContent=g;index.appendChild(h);ZONES.filter(z=>z.tag===g).forEach(z=>chapterButton(z.id,z.name,ZONES.indexOf(z)+1));});
 sel.addEventListener('change',()=>renderGuide(sel.value));
-function openGuide(id){pauseTour();guideWasRotating=autoRotate;autoRotate=false;$('#rot').setAttribute('aria-pressed','false');renderGuide(id||'overview');guide.showModal();$('#guideClose').focus();}
+function openGuide(id){closeWeather(false);pauseTour();guideWasRotating=autoRotate;autoRotate=false;$('#rot').setAttribute('aria-pressed','false');renderGuide(id||'overview');guide.showModal();$('#guideClose').focus();}
 $('#guideBtn').onclick=()=>openGuide('overview');$('#iRead').onclick=()=>openGuide(selected||'overview');$('#guideClose').onclick=()=>guide.close();
 guide.addEventListener('close',()=>{if(guideWasRotating){autoRotate=true;$('#rot').setAttribute('aria-pressed','true');lastInteract=performance.now();}});
 guide.addEventListener('click',e=>{const r=guide.getBoundingClientRect();if(e.target===guide&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))guide.close();});
@@ -673,6 +718,7 @@ $('#iBody').addEventListener('pointerdown',pauseTour);
 $('#iBody').addEventListener('wheel',pauseTour,{passive:true});
 
 function select(id) {
+  if(blastActive)rebuildBase(false); closeWeather(false);
   const z = zoneById[id]; if (!z) return; selected = id; autoRotate = false; $('#rot').setAttribute('aria-pressed', 'false');
   flyTo(z.view);
   $('#info').hidden = false; renderInfo();
@@ -684,7 +730,7 @@ $('#home').addEventListener('click', () => { flyTo({ ...HOME }); });
 $('#rot').addEventListener('click', e => { autoRotate = !autoRotate; e.currentTarget.setAttribute('aria-pressed', String(autoRotate)); lastInteract = 0; });
 $('#rot').setAttribute('aria-pressed', String(autoRotate));
 $('#lbl').addEventListener('click', e => { const on = document.body.classList.toggle('nolabels'); e.currentTarget.setAttribute('aria-pressed', String(!on)); });
-$('#listBtn').addEventListener('click', () => { const on=document.body.classList.toggle('list-open'); $('#listBtn').setAttribute('aria-expanded',String(on)); });
+$('#listBtn').addEventListener('click', () => { closeWeather(false); const on=document.body.classList.toggle('list-open'); $('#listBtn').setAttribute('aria-expanded',String(on)); });
 let tourI = -1, tourTimer = null;
 $('#tour').addEventListener('click', e => {
   if (tourTimer) { clearInterval(tourTimer); tourTimer = null; e.currentTarget.setAttribute('aria-pressed', 'false'); return; }
@@ -693,26 +739,118 @@ $('#tour').addEventListener('click', e => {
 $('#prev').addEventListener('click', () => { const i = Math.max(0, ZONES.findIndex(z => z.id === selected)); select(ZONES[(i - 1 + ZONES.length) % ZONES.length].id); });
 $('#next').addEventListener('click', () => { const i = ZONES.findIndex(z => z.id === selected); select(ZONES[(i + 1) % ZONES.length].id); });
 
+
+const SIM_DATA={"checked":"2026-11-03","sources":{"facts":{"title":"NASA NSSDCA · Mars Fact Sheet","url":"https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html"},"dust":{"title":"NASA JPL · 2018 尘暴与机会号","url":"https://www.jpl.nasa.gov/edu/resources/teachable-moment/mars-rover-mission-comes-to-an-end-but-science-legacy-live-on"},"wind":{"title":"NASA · 火星尘暴的事实与虚构","url":"https://www.nasa.gov/feature/goddard/the-fact-and-fiction-of-martian-dust-storms"},"map":{"title":"NASA / J. Bell · 2001 火星柱面地图","url":"https://science.nasa.gov/asset/hubble/global-map-or-mars-cylindrical-projection/"}},"constants":{"molarMass":0.04349,"gasConstant":8.314462618,"mass":6.4169e+23,"radius":3389500.0,"GM":42828000000000.0,"co2":95.1,"o2":0.16,"solarZenithDeg":45},"presets":[{"id":"clear","name":"晴朗白昼","temp":-35,"pressure":700,"wind":4,"tau":0.5,"night":false,"accent":"#efd4b8","sky":["#6b3725","#b97b53","#d2a17a"],"fog":"#c18b60","fogNear":110,"fogFar":330,"sun":1.6,"hemi":0.42,"fill":0.22,"opacity":0.1,"size":0.18,"note":"日常有尘的火星白昼，不是无大气。按参考范围选定的典型教学工况。"},{"id":"night","name":"寒冷夜间","temp":-85,"pressure":720,"wind":3,"tau":0.5,"night":true,"accent":"#bbccf1","sky":["#02050e","#111b32","#31364b"],"fog":"#1b2336","fogNear":80,"fogFar":290,"sun":0.015,"hemi":0.12,"fill":0.035,"opacity":0.035,"size":0.13,"note":"无日照、气温降低；舱内人工照明仍工作。夜间直达太阳光为零并非尘埃造成。"},{"id":"haze","name":"扬尘天气","temp":-55,"pressure":700,"wind":12,"tau":1.5,"night":false,"accent":"#e9c99e","sky":["#5c3727","#9e704c","#af835e"],"fog":"#ad7c50","fogNear":25,"fogFar":200,"sun":0.65,"hemi":0.36,"fill":0.18,"opacity":0.28,"size":0.25,"note":"空气中悬浮尘埃增加、太阳直射减弱；此处不演算真实扬尘起动或颗粒粒径分布。"},{"id":"storm","name":"强沙尘暴","temp":-45,"pressure":730,"wind":22,"tau":5,"night":false,"accent":"#efb47e","sky":["#281a14","#60412a","#89623d"],"fog":"#805734","fogNear":12,"fogFar":210,"sun":0.12,"hemi":0.28,"fill":0.12,"opacity":0.57,"size":0.34,"note":"遮光与设备积尘是主要风险。风速虽高，稀薄大气使动压仍较低；模型不会把建筑吹走。"},{"id":"extreme","name":"2018 尘暴级遮光","temp":-40,"pressure":720,"wind":28,"tau":10.8,"night":false,"accent":"#efab7b","sky":["#120f0d","#30251a","#4d3925"],"fog":"#49331e","fogNear":5,"fogFar":160,"sun":0.025,"hemi":0.18,"fill":0.07,"opacity":0.75,"size":0.4,"note":"τ=10.8 借鉴机会号区域的2018尘暴记录；温度、气压、风速另行设定，并非该时刻联合实测。"}]};
+// All displayed physical values are derived from SIM_DATA; scene colours and motion are art-direction choices.
+const C=SIM_DATA.constants;
+let activeWeather=SIM_DATA.presets[0], weatherFrameLast;
+const weatherSkies={};
+// A protected cutaway layer makes indoor/outdoor separation explicit.
+const interiorFogMaterials=new Map();
+['hub','hydro','lab','med','gym','water','shelter'].forEach(id=>{if(zoneGroups[id])zoneGroups[id].traverse(o=>{if(!o.material)return;const protect=m=>{if(!interiorFogMaterials.has(m.uuid)){const copy=m.clone();copy.fog=false;copy.needsUpdate=true;interiorFogMaterials.set(m.uuid,copy);}return interiorFogMaterials.get(m.uuid);};o.material=Array.isArray(o.material)?o.material.map(protect):protect(o.material);});});
+SIM_DATA.presets.forEach(w=>{
+ weatherSkies[w.id]=canvasTex(8,512,(g,width,height)=>{const grad=g.createLinearGradient(0,0,0,height);grad.addColorStop(0,w.sky[0]);grad.addColorStop(.55,w.sky[1]);grad.addColorStop(1,w.sky[2]);g.fillStyle=grad;g.fillRect(0,0,width,height);});
+ const b=document.createElement('button');b.type='button';b.dataset.weather=w.id;b.textContent=w.name;b.setAttribute('aria-pressed','false');b.onclick=()=>applyWeather(w.id);$('#weatherPresets').appendChild(b);
+});
+function weatherMetrics(w){
+ const tempK=w.temp+273.15,rho=w.pressure*C.molarMass/(C.gasConstant*tempK),q=.5*rho*w.wind*w.wind;
+ const beam=w.night?0:Math.exp(-w.tau/Math.cos(C.solarZenithDeg*Math.PI/180));return {tempK,rho,q,beam};
+}
+function applyWeather(id){
+ const w=SIM_DATA.presets.find(v=>v.id===id);if(!w)return;activeWeather=w;
+ const v=weatherMetrics(w);
+ sky.material.map=weatherSkies[id];sky.material.color.set(0xffffff);sky.material.needsUpdate=true;
+ scene.fog.color.set(w.fog);scene.fog.near=w.fogNear;scene.fog.far=w.fogFar;
+ sun.intensity=w.sun;hemi.intensity=w.hemi;frontFill.intensity=w.fill;
+ hemi.color.set(w.night?0x8195c8:0xffc9a0);hemi.groundColor.set(w.night?0x11162b:0x3a1a10);
+ sun.color.set(w.night?0x829bcf:0xffd6ad);sunSprite.visible=!w.night;sunSprite.material.opacity=Math.min(1,w.sun);
+ dust.material.opacity=w.opacity;dust.material.size=w.size;dust.material.color.set(w.night?0x7b8eaf:0xe8b985);
+ renderer.toneMappingExposure=w.night?.95:.92;
+ $('#weatherName').textContent=w.name;$('#wTemp').textContent=w.temp;$('#wPressure').textContent=w.pressure;$('#wWind').textContent=w.wind;$('#wTau').textContent=w.tau;
+ $('#wRho').textContent=v.rho.toFixed(4)+' kg/m³';$('#wQ').textContent=v.q.toFixed(2)+' Pa';
+ $('#wBeam').textContent=w.night?'0% · 无日照':(v.beam*100<.01?'< 0.01%':(v.beam*100).toFixed(2)+'%');
+ $('#weatherNote').textContent=w.note;
+ $('#weatherBadge').textContent=w.name+' · '+w.temp+'°C / '+w.wind+' m/s';
+ document.querySelectorAll('[data-weather]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.weather===id)));
+}
+function openWeather(){
+ pauseTour();document.body.classList.remove('list-open');$('#listBtn').setAttribute('aria-expanded','false');
+ $('#weatherPanel').hidden=false;document.querySelector('#weatherPanel .w-scroll').scrollTop=0;document.body.classList.add('weather-open');$('#weatherBtn').setAttribute('aria-expanded','true');$('#weatherClose').focus({preventScroll:true});
+}
+function closeWeather(focus=false){$('#weatherPanel').hidden=true;document.body.classList.remove('weather-open');$('#weatherBtn').setAttribute('aria-expanded','false');if(focus)$('#weatherBtn').focus({preventScroll:true});}
+$('#weatherBtn').onclick=()=>$('#weatherPanel').hidden?openWeather():closeWeather(true);
+$('#weatherBadge').onclick=openWeather;$('#weatherClose').onclick=()=>closeWeather(true);$('#weatherDone').onclick=()=>closeWeather(true);
+$('#weatherMethods').innerHTML='<p><b>观测参考，不是全球统一条件。</b>NASA 资料列出 Viking 着陆点昼夜温度约 −89 至 −31°C，Viking 1 气压约 690–900 Pa，Viking 着陆点尘暴风速约 17–30 m/s。不同高度、季节、地点会改变这些值。</p><p>本页工况均为独立教学选择。τ=0.5 借鉴机会号区域常见尘度；τ=10.8 借鉴2018尘暴记录。中间 τ 与风温压组合不是历史天气重建，不能据此推断因果。</p><div class="w-equation"><code>ρ = p M / (R T)<br>q = ½ ρ v²<br>T直达 = exp[−τ / cos(θ)]</code></div><p>采用理想气体近似，M='+((C.molarMass)*1000).toFixed(2)+' g/mol；T 使用开尔文。q 是动压，不是整栋建筑实际受力，后者还需要面积、阻力系数与结构分析。</p><p>直达光束按教学设定 θ='+C.solarZenithDeg+'° 计算，夜间设为零。τ 依赖波长；此处将其作为有效光学参数，采用平行平面、单束消光近似。<b>未计入散射光、光谱响应、地形与面板积尘；该百分比不是总日照、面板总发电量或供电保障率。</b></p><p>天空颜色、雾化距离、粒子运动和渲染亮度仅为视觉映射，不由上述公式唯一决定。模型不解流体方程、地表扬尘阈值或热平衡；天气切换也不代表真实变化速率。</p><p>夜间保持舱内照明。尘暴不生成地球式暴雨，也不把大型建筑吹飞；基地是否可生存仍取决于能源、热控与防护系统。</p><p>数据核对：'+SIM_DATA.checked+'。非实时天气服务。</p>';
+$('#weatherRefs').innerHTML=['facts','dust','wind'].map(k=>'<a class="w-ref" href="'+SIM_DATA.sources[k].url+'" target="_blank" rel="noopener noreferrer">'+SIM_DATA.sources[k].title+' ↗</a>').join('');
+// This is a cartoon gag, not an explosion or structural-physics model.
+let blastActive=false,blastTime=0,blastWasRotating=false;
+const blastPieces=[],blastPuffs=[],blastGroup=new T.Group();blastGroup.visible=false;scene.add(blastGroup);
+const blastCentre=new T.Vector3(5,-2,8),blastDummy=new T.Object3D();
+const blastRing=new T.Mesh(new T.TorusGeometry(1,.045,6,80),new T.MeshBasicMaterial({color:0xffc58a,transparent:true,opacity:0,depthWrite:false,fog:false}));blastRing.rotation.x=-Math.PI/2;blastRing.position.set(5,1,8);blastGroup.add(blastRing);
+const blastGlow=new T.Sprite(new T.SpriteMaterial({map:canvasTex(128,128,g=>{const a=g.createRadialGradient(64,64,0,64,64,64);a.addColorStop(0,'rgba(255,204,126,.8)');a.addColorStop(.3,'rgba(255,148,65,.5)');a.addColorStop(1,'rgba(255,128,50,0)');g.fillStyle=a;g.fillRect(0,0,128,128);}),transparent:true,depthWrite:false,fog:false}));blastGlow.position.set(5,6,10);blastGroup.add(blastGlow);
+const puffGeometry=new T.IcosahedronGeometry(1,1);
+for(let i=0;i<22;i++){const m=new T.Mesh(puffGeometry,new T.MeshBasicMaterial({color:0xef914b,transparent:true,opacity:0,depthWrite:false,fog:false}));blastGroup.add(m);blastPuffs.push({mesh:m,angle:hash(i,103)*Math.PI*2,seed:hash(i,201),rise:hash(i,301)});}
+const confetti=new T.InstancedMesh(new T.BoxGeometry(.35,.7,.15),new T.MeshBasicMaterial({fog:false}),140);confetti.instanceMatrix.setUsage(T.DynamicDrawUsage);const confettiColors=[0xe9ad6d,0x87b9d8,0x9cc5ae,0xf2d7a5,0xdc997c];for(let i=0;i<140;i++)confetti.setColorAt(i,new T.Color(confettiColors[i%confettiColors.length]));confetti.frustumCulled=false;blastGroup.add(confetti);
+function initialiseBlast(){ /* Visuals are already created; preserve the base until clicked. */ }
+function captureBlastPiece(object,seed){
+ const box3=new T.Box3().setFromObject(object);if(box3.isEmpty())return;const centre=box3.getCenter(new T.Vector3()),size=box3.getSize(new T.Vector3());
+ const original={parent:object.parent,position:object.position.clone(),quaternion:object.quaternion.clone(),scale:object.scale.clone()};
+ const pivot=new T.Group();pivot.position.copy(centre);scene.add(pivot);pivot.attach(object);
+ let dx=centre.x-blastCentre.x,dz=centre.z-blastCentre.z;if(Math.hypot(dx,dz)<3){dx=Math.cos(seed*30);dz=Math.sin(seed*30);}const norm=Math.hypot(dx,dz);dx/=norm;dz/=norm;
+ const distance=14+seed*24,finalX=centre.x+dx*distance,finalZ=centre.z+dz*distance;
+ blastPieces.push({object,pivot,original,centre,final:new T.Vector3(finalX,groundH(finalX,finalZ)+Math.min(4,size.y*.18)+.6,finalZ),height:18+seed*23,flight:2.1+seed*.9,spin:new T.Vector3((seed-.45)*3.7,(hash(seed,41)-.5)*5,(hash(seed,61)-.5)*3.4)});
+}
+function explodeBase(){
+ if(blastActive)rebuildBase(false);
+ pauseTour();closeWeather(false);document.body.classList.remove('list-open');$('#listBtn').setAttribute('aria-expanded','false');if(!$('#info').hidden)$('#iClose').click();
+ blastWasRotating=autoRotate;autoRotate=false;$('#rot').setAttribute('aria-pressed','false');
+ const ids=['hub','hydro','lab','med','gym','water','shelter','drill','isru','solar','battery','antenna','landing','garage'];
+ let n=0;ids.forEach(id=>{const g=zoneGroups[id];if(!g)return;if(id==='solar')g.children.filter(c=>c.type==='Group').slice().forEach(o=>captureBlastPiece(o,hash(++n,711)));else captureBlastPiece(g,hash(++n,711));});
+ blastActive=true;blastTime=reduce?4:0;blastGroup.visible=true;document.body.classList.add('boom-active');$('#detonateBtn').textContent='一键重建';$('#detonateBtn').setAttribute('aria-label','重建刚刚炸飞的基地');
+ $('#boomTitle').textContent='基地：我先飞一会儿';$('#boomCaption').textContent='纯搞笑模型动画 · 没有真实爆炸物，也没有人员';
+ camera.fov=innerWidth<720?80:45;camera.updateProjectionMatrix();
+ const v={t:[6,-2,1],d:innerWidth<720?220:150,az:.12,pol:1.18};flyTo(v);ctl.t.copy(goal.t);ctl.d=goal.d;ctl.az=goal.az;ctl.pol=goal.pol;applyCam();
+ drawBlast();$('#rebuildBase').focus({preventScroll:true});
+}
+function drawBlast(){
+ if(!blastActive)return;const t=blastTime;
+ blastPieces.forEach(p=>{const u=Math.min(1,t/p.flight),ease=1-(1-u)*(1-u);p.pivot.position.lerpVectors(p.centre,p.final,ease);p.pivot.position.y+=Math.sin(u*Math.PI)*p.height;p.pivot.rotation.set(p.spin.x*ease,p.spin.y*ease,p.spin.z*ease);});
+ const pulse=Math.max(0,1-t/1.5);blastRing.visible=t<1.5;blastRing.scale.setScalar(2+t*32);blastRing.material.opacity=pulse*.55;blastGlow.scale.setScalar(8+t*26);blastGlow.material.opacity=Math.max(0,1-t/1.3)*.65;
+ blastPuffs.forEach((p,i)=>{const u=Math.max(0,t-i*.018),r=u*(6+p.seed*11);p.mesh.position.set(5+Math.cos(p.angle)*r,2+u*(5+p.rise*10),8+Math.sin(p.angle)*r*.65);p.mesh.scale.setScalar((2.5+p.seed*5)*(1+u*.6));p.mesh.material.color.set(t<.8?0xeaa15d:0x8b7868);p.mesh.material.opacity=Math.max(0,.48-u*.18);p.mesh.visible=u>0&&p.mesh.material.opacity>0;});
+ for(let i=0;i<140;i++){const a=hash(i,121)*Math.PI*2,r=(12+hash(i,122)*18)*Math.min(t,3),u=Math.min(t,3);blastDummy.position.set(5+Math.cos(a)*r,-2+(20+hash(i,123)*15)*u-11*u*u,8+Math.sin(a)*r*.65);blastDummy.rotation.set(i+t*2,i*.3+t*3,t+i);blastDummy.scale.setScalar(t<3.2?1:0);blastDummy.updateMatrix();confetti.setMatrixAt(i,blastDummy.matrix);}confetti.instanceMatrix.needsUpdate=true;confetti.visible=t<3.2;
+ $('#boomWord').hidden=reduce||t>1.4;$('#boomTitle').textContent=t<2.8?'基地：我先飞一会儿':'基地已成功下班';$('#boomCaption').textContent=t<2.8?'纯搞笑模型动画 · 无人伤亡，只有模型在加班':'本次损失：一座模型基地。预算？点一下就回来了。';
+}
+function updateBlast(dt){if(!blastActive)return;if(!reduce)blastTime=Math.min(4,blastTime+dt);drawBlast();}
+function rebuildBase(focus=true){
+ if(!blastActive)return;
+ blastPieces.forEach(p=>{p.original.parent.add(p.object);p.object.position.copy(p.original.position);p.object.quaternion.copy(p.original.quaternion);p.object.scale.copy(p.original.scale);scene.remove(p.pivot);});blastPieces.length=0;blastActive=false;blastTime=0;camera.fov=innerWidth<720?55:45;camera.updateProjectionMatrix();blastGroup.visible=false;document.body.classList.remove('boom-active');$('#boomWord').hidden=true;$('#detonateBtn').textContent='炸掉基地';$('#detonateBtn').setAttribute('aria-label','直接播放炸飞基地的搞笑动画');autoRotate=blastWasRotating;$('#rot').setAttribute('aria-pressed',String(autoRotate));lastInteract=performance.now();if(focus){flyTo({...HOME});$('#detonateBtn').focus({preventScroll:true});}
+}
+$('#detonateBtn').onclick=()=>blastActive?rebuildBase():explodeBase();$('#rebuildBase').onclick=()=>rebuildBase();$('#blastAgain').onclick=explodeBase;
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#weatherPanel').hidden)closeWeather(true);else if(e.key==='Escape'&&blastActive&&!guide.open)rebuildBase();});
+
 // ---------- resize / loop ----------
-function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w < 720 ? 55 : 45; camera.updateProjectionMatrix(); }
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.fov = w < 720 ? (blastActive?80:55) : 45; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
 if (innerWidth < 720) { HOME.d = 175; HOME.az = 0; ctl.d = goal.d = 175; ctl.az = goal.az = 0; }
 const clock = new T.Clock(); const tmp = new T.Vector3();
 const roverCurve = new T.CatmullRomCurve3([[50, 0, 9], [30, 0, 12], [14, 0, 8], [22, 0, -6], [28, 0, -14], [46, 0, -10], [58, 0, 8]].map(p => new T.Vector3(p[0], 0, p[2])), true);
 function loop() {
   const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime;
+  const realDelta = typeof weatherFrameLast === 'number' ? Math.min(.2, (performance.now()-weatherFrameLast)/1000) : dt; weatherFrameLast=performance.now();
+
   if (autoRotate && performance.now() - lastInteract > 2500) goal.az += dt * .05;
   const k = 1 - Math.pow(.02, dt);
   ctl.t.lerp(goal.t, k); ctl.d += (goal.d - ctl.d) * k; ctl.az += (goal.az - ctl.az) * k; ctl.pol += (goal.pol - ctl.pol) * k;
   applyCam();
-  if (!reduce) {
+  updateBlast(realDelta);
+  if (!reduce && !blastActive) {
     drillParts.spin.rotation.y += dt * 3; drillParts.arm.rotation.z = .5 + Math.sin(t * .8) * .25;
     drillParts.flowY.forEach((m, i) => { m.position.y = -31 + ((t * 4 + i * 3) % 30); });
     dish.rotation.y = Math.sin(t * .15) * .9;
     solarPanels.forEach(p => p.rotation.x = -.55 + Math.sin(t * .1) * .12);
     const u = (t * .012) % 1; roverCurve.getPointAt(u, tmp); movingRover.position.set(tmp.x, groundH(tmp.x, tmp.z), tmp.z);
     roverCurve.getTangentAt(u, tmp); movingRover.rotation.y = Math.atan2(-tmp.z, tmp.x);
-    const p = dust.geometry.attributes.position; for (let i = 0; i < p.count; i++) { let x = p.getX(i) + dt * 3; if (x > 130) x = -130; p.setX(i, x); } p.needsUpdate = true;
+    const p = dust.geometry.attributes.position; for (let i = 0; i < p.count; i++) { let x = p.getX(i) + dt * activeWeather.wind * .32; if (x > 130) x = -130; p.setX(i, x); } p.needsUpdate = true;
   }
   // labels
   const w = innerWidth, h = innerHeight;
@@ -725,10 +863,11 @@ function loop() {
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
-applyCam(); loop();
+applyWeather('clear'); initialiseBlast(); applyCam(); loop();
 document.body.classList.add('ready');
 window.__select = select;
 window.__knowledge = {zones:ZONES.map(z=>z.id),openGuide,renderGuide};
+window.__simulation = {applyWeather,openWeather,closeWeather,explodeBase,rebuildBase,updateBlast,setBlastTime:t=>{blastTime=Number(t);drawBlast();},getState:()=>({weather:activeWeather.id,exploded:blastActive,time:blastTime,pieces:blastPieces.length}),getMetrics:()=>weatherMetrics(activeWeather)};
 addEventListener('keydown',e=>{if(e.key==='Escape'&&!guide.open&&!$('#info').hidden)$('#iClose').click();});
 })();
 </script>
